@@ -5,14 +5,22 @@ from django.utils.timezone import datetime
 from customer.models import OrderModel, Resevations
 
 
-class Dashboard(View):
+class Dashboard(View, LoginRequiredMixin, UserPassesTestMixin):
     def get(self, request, *args, **kwargs):
         # get the current date
         today = datetime.today()
-        orders = OrderModel.objects.filter(
-            created_on__year=today.year, created_on__month=today.month, created_on__day=today.day)
+        if (request.user.is_staff):
+            orders = OrderModel.objects.filter(
+                created_on__year=today.year, created_on__month=today.month, created_on__day=today.day)
+        else:
+            orders = OrderModel.objects.filter(
+                created_on__year=today.year, created_on__month=today.month, email=request.user.email)
 
-        reservations = Resevations.objects.all()
+        if (request.user.is_staff):
+            reservations = Resevations.objects.all()
+        else:
+            reservations = Resevations.objects.filter(
+                email=request.user.email).all()
 
         # loop through the orders and add the price value
         total_revenue = 0
@@ -27,7 +35,10 @@ class Dashboard(View):
             'total_orders': len(orders)
         }
 
-        return render(request, 'restaurant/dashboard.html', context)
+        if (request.user.is_staff == True):
+            return render(request, 'restaurant/dashboard.html', context)
+
+        return render(request, 'customer/dashboard.html', context)
 
     def test_func(self):
         return self.request.user.groups.filter(name='Staff').exists()

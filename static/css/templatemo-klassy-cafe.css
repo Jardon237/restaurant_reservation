@@ -972,9 +972,9 @@ menu
 
 #menu .price h6 {
   position: absolute;
-  width: 70px;
+  min-width: 100px;
   height: 70px;
-  background-color: #fb5849;
+  background-color: #30a536;
   font-size: 20px;
   font-weight: 700;
   color: #fff;
@@ -1451,9 +1451,9 @@ offers
   position: absolute;
   top: 15px;
   right: 0;
-  width: 70px;
+  min-width: 100px;
   height: 70px;
-  background-color: #fb5849;
+  background-color: #229722;
   display: inline-block;
   text-align: center;
   line-height: 70px;
