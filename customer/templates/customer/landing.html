@@ -34,6 +34,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mb-5 justify-content-center">
+                        {% for message in messages %}
+                        <span class="row alert alert-success">{{ message }}</span>
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="main-banner header-text">

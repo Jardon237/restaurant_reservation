@@ -1,12 +1,7 @@
 {% extends 'customer/base.html' %}
 
 {% block content %}
-<div class="empty mt-5"></div>
-<div class="mb-5">
-    {% for message in messages %}
-    <span class="row alert alert-success">{{ message }}</span>
-    {% endfor %}
-</div>
+<div class="row mt-5"></div>
 
 <div class="row justify-content-center mt-5">
     <div class="col-md-10 card m-1 p-3">
@@ -52,16 +47,21 @@
                                 data-target="#exampleModal">
                                 Cancel
                             </button>
-                            {% include 'customer/modal.html' %}
+                            {% include 'customer/modals/cancel_order.html' %}
                         </td>
 
-                    </tr>
+                    <reservation/tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+</div>
+<div class="row mb-5 justify-content-center">
+    {% for message in messages %}
+    <span class="row alert alert-success">{{ message }}</span>
+    {% endfor %}
 </div>
 <div class="row justify-content-center mt-5">
     <div class="col-md-10 card m-1">
@@ -99,7 +99,11 @@
 
                         </td>
                         <td>
-                            <button class="btn btn-warning">Cancel</button>
+                            <button type="button" class="btn btn-warning" data-toggle="modal"
+                                data-target="#exampleModal">
+                                Cancel
+                            </button>
+                            {% include 'customer/modals/cancel_reservation.html' %}
                         </td>
                     </tr>
                     {% endfor %}

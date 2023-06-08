@@ -1,11 +1,16 @@
+from datetime import datetime
 import json
 from django.shortcuts import render, redirect
 from django.views import View
 from django.core.mail import send_mail
+from restaurant.models import ReservationSetting
+
+from restaurant.views import SetReservations
 from .models import MenuItem, Category, OrderModel, Resevations
 from django.contrib import messages
-from django.shortcuts import  get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+
 
 class Index(View):
     def get(self, request, *args, **kwargs):
@@ -15,25 +20,27 @@ class Index(View):
 class About(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'customer/about.html')
+
+
 class MenuPage(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'customer/menu.html')
+
 
 class CancelOrder(View):
     def post(self, request, *args, **kwargs):
         order_id = request.POST['order_id']
         orders = OrderModel.objects.filter(pk=order_id)
-        if(orders != None):
+        if (orders != None):
             orders.delete()
             messages.success(request, 'order successful cancel')
-            return  render(request, 'customer/dashboard.html')
-        return  render(request, 'customer/dashboard.html')
-        
+            return render(request, 'customer/dashboard.html')
+        return render(request, 'customer/dashboard.html')
+
 
 class PlaceOrder(View):
     def get(selfl, request, *args, **kwargs):
         return render(request, 'customer/index.html')
-
 
 
 class Order(View):
@@ -145,10 +152,26 @@ class OrderConfirmation(View):
 class OrderPayConfirmation(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'customer/order_pay_confirmation.html')
+
+
 class ReservationPage(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'customer/reservation.html')
-    
+
+
+class CancelReservation(View):
+    def post(self, request, *args, **kwargs):
+        reservation_id = request.POST['reservation_id']
+        reservation = Resevations.objects.filter(pk=reservation_id)
+        if (reservation != None):
+            reservation.delete()
+            reservations = Resevations.objects.all()
+            messages.success(request, 'reservation successful cancelled')
+            return redirect('dashboard')
+        return redirect('dashboard')
+
+
+
 class MakeReservation(View):
     def post(self, request, *args, **kwargs):
         name = request.POST.get('name')
@@ -158,6 +181,13 @@ class MakeReservation(View):
         date = request.POST.get('date')
         Resevation_time = request.POST.get('time')
 
+        total_number_of_reservations_set_for_given_day = ReservationSetting.objects.filter(date=date).count()
+        reservations_made_given_date = Resevations.objects.filter(date=date).count()
+
+        if(total_number_of_reservations_set_for_given_day <= reservations_made_given_date):
+            messages.error(request, 'sorry, there are no more available spaces'+date)
+            return redirect('index')
+        
         reservation = Resevations.objects.create(
             name=name,
             email=email,
@@ -179,4 +209,3 @@ class MakeReservation(View):
         )
 
         return redirect('index')
-    

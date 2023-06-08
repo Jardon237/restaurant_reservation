@@ -1,0 +1,38 @@
+<!-- Modal -->
+<div class="modal fade" id="SetReservationsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Set Reservation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'reservation_settings' %}" class="form" id="contact" method="POST">
+                    {% csrf_token %}
+                    <div class="row form-group">
+                        <label for="number_of_tables_per_day">
+                            <input name="number_of_tables_per_day" type="number" id="number_of_tables_per_day" placeholder="Set Number OF Tables for Today" required=""
+                                class="form-control">
+                        </label>
+                    </div>
+                    <div class="row form-group">
+                        <label for="date">
+                            <input name="date" type="date" id="date" required=""
+                                class="form-control">
+                        </label>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Yes Cancel</button>
+                    </div>
+
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
