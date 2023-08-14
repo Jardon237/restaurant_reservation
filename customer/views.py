@@ -184,7 +184,7 @@ class MakeReservation(View):
         total_number_of_reservations_set_for_given_day = ReservationSetting.objects.filter(date=date).count()
         reservations_made_given_date = Resevations.objects.filter(date=date).count()
 
-        if(total_number_of_reservations_set_for_given_day <= reservations_made_given_date):
+        if(total_number_of_reservations_set_for_given_day >= reservations_made_given_date):
             messages.error(request, 'sorry, there are no more available spaces'+date)
             return redirect('index')
         
